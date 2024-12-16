@@ -73,8 +73,8 @@ The dataset contains the following key columns:
 
 1. Clone the repository:
    ```bash
-   git clone <repository_url>
-   cd <repository_name>
+   git clone <[repository_url](https://github.com/awnonbhowmik/DENV-Data-Analysis)>
+   cd <DENV-Data-Analysis>
    ```
 2. Install dependencies:
    ```bash
