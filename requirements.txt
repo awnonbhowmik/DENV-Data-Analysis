@@ -1,0 +1,23 @@
+# Core dependencies for DENV Data Analysis
+pandas>=1.5.0
+numpy>=1.23.0
+matplotlib>=3.6.0
+seaborn>=0.12.0
+geopandas>=0.12.0
+openpyxl>=3.0.0
+
+# Machine Learning
+scikit-learn>=1.2.0
+torch>=2.0.0
+prophet>=1.1.0
+
+# Time series analysis
+statsmodels>=0.14.0
+
+# Jupyter
+jupyter>=1.0.0
+notebook>=6.5.0
+nbconvert>=7.0.0
+
+# Performance optimization
+functools-lru-cache>=1.6.0  # For Python < 3.9, built-in for 3.9+
