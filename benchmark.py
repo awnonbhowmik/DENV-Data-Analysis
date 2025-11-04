@@ -65,10 +65,13 @@ def benchmark_describe_operation():
     start = time.time()
     
     description = data.drop(columns=['Year']).describe()
-    description.loc[:, description.columns.difference(['Population', 'Population Density', 'UPop', 'RPop', 'Infected', 'Death'])] = \
-        description.loc[:, description.columns.difference(['Population', 'Population Density', 'UPop', 'RPop', 'Infected', 'Death'])].round(2)
-    description[['Population', 'Population Density', 'UPop', 'RPop', 'Infected', 'Death']] = \
-        description[['Population', 'Population Density', 'UPop', 'RPop', 'Infected', 'Death']].astype(int)
+    
+    # Compute column difference once
+    pop_cols = ['Population', 'Population Density', 'UPop', 'RPop', 'Infected', 'Death']
+    non_pop_cols = description.columns.difference(pop_cols)
+    
+    description.loc[:, non_pop_cols] = description.loc[:, non_pop_cols].round(2)
+    description[pop_cols] = description[pop_cols].astype(int)
     
     time_original = time.time() - start
     print(f"  Time: {time_original:.4f}s")

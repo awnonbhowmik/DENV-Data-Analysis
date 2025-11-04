@@ -179,10 +179,11 @@ def add_compass_arrows(ax, arrow_base_x=0.9, arrow_base_y=0.9, arrow_length=0.05
             transform=ax.transAxes
         ))
         
-        text_kwargs = {'ha': 'center', 'fontsize': 12, 'transform': ax.transAxes, 'weight': 'bold'}
+        # Set text alignment based on direction
         if label in ['E', 'W']:
-            text_kwargs['va'] = 'center'
-            del text_kwargs['ha']
+            text_kwargs = {'va': 'center', 'fontsize': 12, 'transform': ax.transAxes, 'weight': 'bold'}
+        else:
+            text_kwargs = {'ha': 'center', 'fontsize': 12, 'transform': ax.transAxes, 'weight': 'bold'}
         
         ax.text(arrow_base_x + label_x, arrow_base_y + label_y, label, **text_kwargs)
 
@@ -230,7 +231,7 @@ def add_scale_bar(ax, num_segments=4, scale_bar_x=0.1, scale_bar_y=0.05,
 def annotate_map_centroids(gdf, ax, name_column='ADM1_EN'):
     """
     Annotate map with region names at centroids.
-    Optimized using vectorized operations where possible.
+    Uses iteration for compatibility with matplotlib annotations.
     
     Args:
         gdf: GeoDataFrame with geometries
