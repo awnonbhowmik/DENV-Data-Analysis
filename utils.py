@@ -26,6 +26,9 @@ def load_excel_cached(filepath: str) -> pd.DataFrame:
     Returns a copy of the cached DataFrame so that callers can freely
     modify it without corrupting the cache for subsequent calls.
     
+    Call ``load_excel_cached.cache_clear()`` to invalidate the cache
+    (e.g. after the underlying file has been updated on disk).
+    
     Args:
         filepath: Path to the Excel file
         
@@ -47,6 +50,9 @@ def load_geojson_cached(filepath: str) -> gpd.GeoDataFrame:
     
     Returns a copy of the cached GeoDataFrame so that callers can freely
     modify it without corrupting the cache for subsequent calls.
+    
+    Call ``load_geojson_cached.cache_clear()`` to invalidate the cache
+    (e.g. after the underlying file has been updated on disk).
     
     Args:
         filepath: Path to the GeoJSON file
