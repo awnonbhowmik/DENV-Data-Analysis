@@ -6,7 +6,7 @@ Optimized for performance with caching and vectorized operations
 import pandas as pd
 import geopandas as gpd
 from functools import lru_cache
-from typing import List, Dict, Optional
+from typing import List, Optional
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -14,9 +14,20 @@ warnings.filterwarnings("ignore")
 
 # Cache for data loading to avoid repeated file I/O
 @lru_cache(maxsize=10)
+def _load_excel(filepath: str) -> pd.DataFrame:
+    """Internal cached loader — do not use directly (returns a shared reference)."""
+    return pd.read_excel(filepath)
+
+
 def load_excel_cached(filepath: str) -> pd.DataFrame:
     """
     Load Excel file with caching to avoid repeated I/O operations.
+    
+    Returns a copy of the cached DataFrame so that callers can freely
+    modify it without corrupting the cache for subsequent calls.
+    
+    Call ``load_excel_cached.cache_clear()`` to invalidate the cache
+    (e.g. after the underlying file has been updated on disk).
     
     Args:
         filepath: Path to the Excel file
@@ -24,13 +35,24 @@ def load_excel_cached(filepath: str) -> pd.DataFrame:
     Returns:
         DataFrame with the loaded data
     """
-    return pd.read_excel(filepath)
+    return _load_excel(filepath).copy()
 
 
 @lru_cache(maxsize=5)
+def _load_geojson(filepath: str) -> gpd.GeoDataFrame:
+    """Internal cached loader — do not use directly (returns a shared reference)."""
+    return gpd.read_file(filepath)
+
+
 def load_geojson_cached(filepath: str) -> gpd.GeoDataFrame:
     """
     Load GeoJSON file with caching to avoid repeated I/O operations.
+    
+    Returns a copy of the cached GeoDataFrame so that callers can freely
+    modify it without corrupting the cache for subsequent calls.
+    
+    Call ``load_geojson_cached.cache_clear()`` to invalidate the cache
+    (e.g. after the underlying file has been updated on disk).
     
     Args:
         filepath: Path to the GeoJSON file
@@ -38,7 +60,12 @@ def load_geojson_cached(filepath: str) -> gpd.GeoDataFrame:
     Returns:
         GeoDataFrame with the loaded geodata
     """
-    return gpd.read_file(filepath)
+    return _load_geojson(filepath).copy()
+
+
+# Expose cache_clear on the public functions for backward compatibility
+load_excel_cached.cache_clear = _load_excel.cache_clear
+load_geojson_cached.cache_clear = _load_geojson.cache_clear
 
 
 def describe_data_optimized(data: pd.DataFrame, 
@@ -266,6 +293,11 @@ def create_time_series_dataset(data, time_step=60):
     
     # Pre-allocate arrays for efficiency
     n_samples = len(data) - time_step - 1
+    if n_samples <= 0:
+        raise ValueError(
+            f"time_step ({time_step}) must be less than len(data) - 1 "
+            f"({len(data) - 1}), got n_samples={n_samples}"
+        )
     X = np.zeros((n_samples, time_step, 1))
     y = np.zeros(n_samples)
     
