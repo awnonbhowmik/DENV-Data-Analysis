@@ -6,7 +6,7 @@ Optimized for performance with caching and vectorized operations
 import pandas as pd
 import geopandas as gpd
 from functools import lru_cache
-from typing import List, Dict, Optional
+from typing import List, Optional
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -293,6 +293,11 @@ def create_time_series_dataset(data, time_step=60):
     
     # Pre-allocate arrays for efficiency
     n_samples = len(data) - time_step - 1
+    if n_samples <= 0:
+        raise ValueError(
+            f"time_step ({time_step}) must be less than len(data) - 1 "
+            f"({len(data) - 1}), got n_samples={n_samples}"
+        )
     X = np.zeros((n_samples, time_step, 1))
     y = np.zeros(n_samples)
     

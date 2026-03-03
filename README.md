@@ -73,8 +73,12 @@ The dataset contains the following key columns:
 ├── heatmap.ipynb                        # Geographic heatmaps
 ├── predictive_analysis.ipynb            # ML predictions
 ├── optimization_examples.ipynb          # Performance optimization demos
+├── old.ipynb                            # Legacy analysis notebook
 ├── utils.py                             # Optimized utility functions
+├── benchmark.py                         # Performance benchmark script
 ├── PERFORMANCE_OPTIMIZATION.md          # Performance improvement guide
+├── OPTIMIZATION_SUMMARY.md              # Optimization results summary
+├── QUICK_START.md                       # Quick start guide for optimizations
 ├── requirements.txt                     # Python dependencies
 └── README.md                            # Project description
 ```
